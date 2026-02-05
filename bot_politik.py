@@ -14,11 +14,16 @@ def get_government_blunder():
         tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
         groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-        query = f"berita blunder pejabat pemerintah indonesia kontroversial aneh terbaru hari ini {hari_ini}"
+        query = f"site:x.com OR site:twitter.com berita blunder pemerintah indonesia viral {hari_ini}"
         
-        search_result = tavily.search(query=query, search_depth="advanced", max_results=7)
+        search_result = tavily.search(
+            query=query, 
+            search_depth="advanced", 
+            max_results=10,
+            include_domains=["x.com", "twitter.com", "detik.com", "tempo.co", "cnnindonesia.com"]
+        )
 
-        final_prompt = f"{base_prompt}\n\nDATA BERITA TERBARU:\n{search_result}"
+        final_prompt = f"{base_prompt}\n\nDATA TERBARU DARI X DAN BERITA:\n{search_result}"
 
         completion = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
@@ -38,7 +43,7 @@ def get_government_blunder():
         }
 
         requests.post(url, json=payload)
-        print("Laporan berhasil dikirim!")
+        print("Done")
 
     except Exception as e:
         print(f"Error: {e}")
