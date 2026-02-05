@@ -19,11 +19,15 @@ def get_government_blunder():
         search_result = tavily.search(
             query=query, 
             search_depth="advanced", 
-            max_results=10,
-            include_domains=["x.com", "twitter.com", "detik.com", "tempo.co", "cnnindonesia.com"]
+            max_results=3,
+            include_domains=["x.com", "twitter.com", "detik.com", "tempo.co"]
         )
 
-        final_prompt = f"{base_prompt}\n\nDATA TERBARU DARI X DAN BERITA:\n{search_result}"
+        context = ""
+        for res in search_result['results']:
+            context += f"Judul: {res['title']}\nKonten: {res['content'][:500]}\nURL: {res['url']}\n\n"
+
+        final_prompt = f"{base_prompt}\n\nDATA TERBARU:\n{context}"
 
         completion = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
