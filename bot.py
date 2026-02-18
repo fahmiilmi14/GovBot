@@ -55,7 +55,6 @@ def main():
             pesan = f"🔔 *Waktunya Sholat {name}!*\n⌚ {prayer_time} WIB\n\n{ai_msg}"
             send_telegram(pesan)
             break
-    send_telegram("Tes koneksi: Bot Sholat sudah standby!")
 if __name__ == "__main__":
     main()
   
