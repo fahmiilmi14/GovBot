@@ -50,12 +50,12 @@ def main():
     for key, name in prayers.items():
         prayer_time = timings[key]
         if current_time == prayer_time:
-            prompt = f"Berikan satu kalimat singkat pengingat sholat {name} yang keren untuk mahasiswa teknik informatika."
+            prompt = f"Berikan satu kalimat singkat pengingat sholat {name} yang keren untuk mahasiswa."
             ai_msg = get_ai_response(prompt)
             pesan = f"🔔 *Waktunya Sholat {name}!*\n⌚ {prayer_time} WIB\n\n{ai_msg}"
             send_telegram(pesan)
             break
-
+    send_telegram("Tes koneksi: Bot Sholat sudah standby!")
 if __name__ == "__main__":
     main()
   
