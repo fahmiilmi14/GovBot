@@ -47,7 +47,7 @@ def main():
         "Isha": "Isya"
     }
     
-    send_telegram("Tes koneksi: Bot Sholat sudah standby!")
+    send_telegram("Assalamualaikum Wr. Wb.")
     
     for key, name in prayers.items():
         prayer_time = timings[key]
