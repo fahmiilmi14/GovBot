@@ -36,27 +36,23 @@ def send_telegram(message):
 def main():
     tz = pytz.timezone('Asia/Jakarta')
     now = datetime.datetime.now(tz)
-    current_time = now.strftime("%H:%M")
-    
     timings = get_prayer_times()
-    prayers = {
-        "Fajr": "Subuh",
-        "Dhuhr": "Dzuhur",
-        "Asr": "Ashar",
-        "Maghrib": "Maghrib",
-        "Isha": "Isya"
-    }
-    
-    send_telegram("Assalamualaikum Wr. Wb.")
+    prayers = {"Fajr": "Subuh", "Dhuhr": "Dzuhur", "Asr": "Ashar", "Maghrib": "Maghrib", "Isha": "Isya"}
+
+    send_telegram("Assalamualaikum wr wb")
     
     for key, name in prayers.items():
-        prayer_time = timings[key]
-        if current_time == prayer_time:
-            prompt = f"Berikan satu kalimat singkat pengingat sholat {name} yang keren untuk mahasiswa."
+        p_time = timings[key]
+        p_hour, p_min = map(int, p_time.split(':'))
+        prayer_dt = now.replace(hour=p_hour, minute=p_min, second=0, microsecond=0)
+        diff = (now - prayer_dt).total_seconds()
+        
+        if 0 <= diff < 600:
+            prompt = f"Berikan satu kalimat singkat pengingat sholat {name} yang keren untuk mahasiswa teknik informatika."
             ai_msg = get_ai_response(prompt)
-            pesan = f"🔔 *Waktunya Sholat {name}!*\n⌚ {prayer_time} WIB\n\n{ai_msg}"
+            pesan = f"🔔 *Waktunya Sholat {name}!*\n⌚ {p_time} WIB\n\n{ai_msg}"
             send_telegram(pesan)
             break
+
 if __name__ == "__main__":
     main()
-  
