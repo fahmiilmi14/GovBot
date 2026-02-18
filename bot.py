@@ -46,7 +46,9 @@ def main():
         "Maghrib": "Maghrib",
         "Isha": "Isya"
     }
-
+    
+    send_telegram("Tes koneksi: Bot Sholat sudah standby!")
+    
     for key, name in prayers.items():
         prayer_time = timings[key]
         if current_time == prayer_time:
