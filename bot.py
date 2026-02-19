@@ -9,10 +9,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 client = Groq(api_key=GROQ_API_KEY)
 
 def get_funny_motivation():
-    prompt = (
-        "Berikan satu kalimat motivasi yang sangat lucu, sarkas, dan 'relatable' "
-        "untuk orang yang lagi malas atau capek. Gunakan bahasa gaul Indonesia yang santai."
-    )
+    prompt = "Kasih satu kalimat lucu singkat."
     try:
         completion = client.chat.completions.create(
             model="llama3-8b-8192",
@@ -21,25 +18,17 @@ def get_funny_motivation():
         )
         return completion.choices[0].message.content
     except Exception as e:
-        print(f"Error: {e}")
-        return "Tetap semangat! Ingat, rebahan itu perlu, tapi bayar tagihan itu fardu."
+        # Kirim error aslinya ke Telegram supaya kita tahu masalahnya
+        return f"❌ ERROR AI: {str(e)}"
 
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID, 
-        "text": message, 
-        "parse_mode": "Markdown"
-    }
-    try:
-        requests.post(url, json=payload)
-    except:
-        pass
+    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message}
+    requests.post(url, json=payload)
 
 def main():
     motivation = get_funny_motivation()
-    full_message = f"✨ *Mood Booster Hari Ini* ✨\n\n{motivation}\n\n🚀 _Keep moving, keep smiling!_"
-    send_telegram(full_message)
+    send_telegram(f"Hasil Debug:\n\n{motivation}")
 
 if __name__ == "__main__":
     main()
